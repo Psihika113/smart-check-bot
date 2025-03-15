@@ -5,6 +5,9 @@ import sqlite3
 import asyncio
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from aiogram.filters import Command
+from aiogram.utils.markdown import hbold
+from aiogram.types import Message
 from fpdf import FPDF
 
 # Настройки бота
@@ -28,13 +31,12 @@ keyboard = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
-
-@dp.message_handler(commands=["start"])
-async def start_command(message: types.Message):
+@dp.message(Command("start"))
+async def start_command(message: Message):
     await message.answer("Привет! Я помогу тебе с чеками. Выбери команду:", reply_markup=keyboard)
 
-@dp.message_handler(content_types=[types.ContentType.PHOTO, types.ContentType.DOCUMENT])
-async def handle_receipt(message: types.Message):
+@dp.message(lambda message: message.photo or message.document)
+async def handle_receipt(message: Message):
     file_id = message.photo[-1].file_id if message.photo else message.document.file_id
     file_info = await bot.get_file(file_id)
     file_path = file_info.file_path
@@ -50,8 +52,8 @@ async def handle_receipt(message: types.Message):
     os.remove(file_name)
     await message.answer("✅ Чек обработан и добавлен в базу!")
 
-@dp.message_handler(lambda message: message.text == "📊 Скачать PDF")
-async def generate_pdf(message: types.Message):
+@dp.message(lambda message: message.text == "📊 Скачать PDF")
+async def generate_pdf(message: Message):
     cursor.execute("SELECT * FROM receipts")
     rows = cursor.fetchall()
     
@@ -85,8 +87,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
-    os.remove(pdf_file)
-
-if __name__ == "__main__":
-    executor.start_polling(dp, skip_updates=True)
