@@ -20,9 +20,14 @@ dp = Dispatcher()
 logging.basicConfig(level=logging.INFO)
 
 # Клавиатура команд
-keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=[])
-keyboard.add(KeyboardButton("📄 Добавить чек"))
-keyboard.add(KeyboardButton("📊 Скачать PDF"))
+keyboard = ReplyKeyboardMarkup(
+    keyboard=[
+        [KeyboardButton(text="📄 Добавить чек")],
+        [KeyboardButton(text="📊 Скачать PDF")]
+    ],
+    resize_keyboard=True
+)
+
 
 @dp.message_handler(commands=["start"])
 async def start_command(message: types.Message):
