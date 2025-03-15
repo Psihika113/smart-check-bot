@@ -4,10 +4,8 @@ import pytesseract
 import sqlite3
 import asyncio
 from aiogram import Bot, Dispatcher, types
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram.filters import Command
-from aiogram.utils.markdown import hbold
-from aiogram.types import Message
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, Message
 from fpdf import FPDF
 
 # Настройки бота
@@ -82,7 +80,6 @@ async def generate_pdf(message: Message):
     os.remove(pdf_file)
 
 async def main():
-    dp.include_router(dp)
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
