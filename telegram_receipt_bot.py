@@ -20,7 +20,7 @@ dp = Dispatcher()
 logging.basicConfig(level=logging.INFO)
 
 # Клавиатура команд
-keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
+keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=[])
 keyboard.add(KeyboardButton("📄 Добавить чек"))
 keyboard.add(KeyboardButton("📊 Скачать PDF"))
 
